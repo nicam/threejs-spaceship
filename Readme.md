@@ -6,11 +6,11 @@ Three.js Spaceship
 #Setup
 
 ##Check repo out
-  git clone https://github.com/nicam/threejs-spaceship
+    git clone https://github.com/nicam/threejs-spaceship
 
 ##Run Webserver
-  cd threejs-spaceship
-  python -m SimpleHTTPServer
+    cd threejs-spaceship
+    python -m SimpleHTTPServer
 
 ##Enjoy
 Go to <a href="http://localhost:8000">http://localhost:8000</a>
