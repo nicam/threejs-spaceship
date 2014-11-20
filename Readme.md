@@ -1,7 +1,7 @@
 Three.js Spaceship
 =======
 
-<img src="https://www.dropbox.com/s/xa62a1r5lqubbv6/Screenshot%202014-11-20%2018.46.33.png?dl=1?dl=1">
+<img src="https://photos-5.dropbox.com/t/1/AABWBujcwRL-oag1kEJSBaqjIuuoyXZbsXxypS3VMDQpEg/12/419439/png/1024x768/3/1416510000/0/2/Screenshot%202014-11-20%2018.46.33.png/KX2YoW34V9fk4mSAy8EWjaYCAxyk-gAmwN9iCEngPms">
 
 #Setup
 
