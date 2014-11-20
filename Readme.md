@@ -6,7 +6,7 @@ Three.js Spaceship
 #Setup
 
 ##Check repo out
-  git clone https://github.com/nicam/threejs-macbook
+  git clone https://github.com/nicam/threejs-spaceship
 
 ##Run Webserver
   cd threejs-spaceship
