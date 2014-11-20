@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Collada File Import</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<div id="webgl-container"></div>
+<div id="gui-container" style="position:absolute;z-index:1;top:0;left:0">
+</div>
+
+<body>
+    <script type="text/javascript" src="js/three.js"></script>
+    <script type="text/javascript" src="js/OrbitControls.js"></script>
+    <script type="text/javascript" src="js/ColladaLoader.js"></script>
+    <script type="text/javascript">
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+      var renderer = new THREE.WebGLRenderer();
+      var texture = THREE.ImageUtils.loadTexture('texture.png', new THREE.UVMapping());
+
+      renderer.setClearColor(0xeeeeee, 1.0);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      var webglContainer = document.getElementById('webgl-container');
+      webglContainer.appendChild(renderer.domElement);
+
+       // camera controls
+      var camControls = new THREE.OrbitControls(camera, renderer.domElement);
+      camControls.damping = 0.2;
+      // camControls.addEventListener('change', render);
+
+       // window resize handler
+      window.addEventListener('resize', onWindowResize, false);
+
+       // ---- 3D CONTENT CREATION -----------------------------------------------------
+
+      // Create Spaceship
+      var loader = new THREE.ColladaLoader();
+      loader.options.convertUpAxis = true;
+      loader.load('spaceship.dae', function (collada) {
+        //FIX bump scale
+        collada.scene.children[5].children[0].material.bumpScale = 0.03;
+        // Manually load texture...
+        collada.scene.children[5].children[0].material.map = texture;
+        // add Mesh to Scene
+        scene.add(collada.scene);
+      });
+
+      // Create Earth
+      var geometry = new THREE.SphereGeometry( 4, 20, 20 );
+      var material = new THREE.MeshBasicMaterial({
+         map: THREE.ImageUtils.loadTexture('land_ocean_ice_cloud_2048.jpg', new THREE.UVMapping()),
+         overdraw: 0.5 
+      });
+      var earth = new THREE.Mesh( geometry, material );
+      earth.position.x = 116;
+      earth.position.y = -20;
+      earth.position.z = -12;
+      scene.add(earth);
+
+      // Create Sky
+      var skyGeometry = new THREE.BoxGeometry( 500, 500, 500 );
+      var materialArray = [];
+      for (var i = 0; i < 6; i++) {
+        materialArray.push( new THREE.MeshPhongMaterial({
+          map: THREE.ImageUtils.loadTexture('sky.jpg', new THREE.UVMapping()),
+          side: THREE.BackSide
+        }));
+      }
+      var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+      var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+      scene.add(skyBox);
+       // ---- END OF 3D CONTENT CREATION ---------------------------------------------
+
+      camera.position.x = -9;
+      camera.position.y = 8.6;
+      camera.position.z = 8.8
+      camera.lookAt(scene.position);
+
+       // add subtle ambient lighting
+      var ambientLight = new THREE.AmbientLight(0x111111);
+      scene.add(ambientLight);
+
+       // add headlight 
+      var headLight = new THREE.PointLight (0x888888, 1.0); 
+      headLight.position.set(camera.position.x, camera.position.y, camera.position.z); 
+      scene.add(headLight);
+
+      function onWindowResize() {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+          render();
+      }
+
+      function animate() {
+        requestAnimationFrame( animate );
+        render();
+      }
+
+       // init and call render function
+      function render() {
+        headLight.position.set(camera.position.x, camera.position.y, camera.position.z);
+        if (earth) {
+          earth.rotation.y -= 0.004;
+        }
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    </script>
+</body>
+
+</html>
